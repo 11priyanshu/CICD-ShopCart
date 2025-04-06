@@ -5,24 +5,22 @@ name: "Deploy to aws"
 on: workflow_dispatch
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest # or self-hosted
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18' # or whatever version you're using
+    deploy:
+        runs-on: self-hosted
+        steps:
+            - name: "Setup nodejs"
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
 
-      - name: Install dependencies
-        run: npm install
+            - name: "Checkout code"
+              uses: actions/checkout@v2
 
-      - name: Run tests
-        run: npm test
+            - name: "Install dependencies"
+              run: npm install
 
-      - name: Install PM2
-        run: npm install -g pm2
-
-      - name: Restart server using PM2
-        run: pm2 restart server
+            - name: "Run the tests"
+              run: npm test
+            
+            - name: "Deploy to aws"
+              run: pm2 restart server
